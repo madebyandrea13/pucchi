@@ -35,7 +35,7 @@
   }
   #face{
     position:fixed;inset:0;overflow:hidden;
-    background:radial-gradient(ellipse 75% 85% at 50% 42%, var(--skin-hi) 0%, var(--skin) 55%, var(--skin-dk) 100%);
+    background:radial-gradient(ellipse 75% 85% at 50% 48%, var(--skin-hi) 0%, var(--skin) 55%, var(--skin-dk) 100%);
     animation:breathe 4.5s ease-in-out infinite;
     transform-origin:50% 100%;
   }
@@ -47,11 +47,11 @@
   @keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-1.6deg)}40%{transform:rotate(1.6deg)}60%{transform:rotate(-1deg)}80%{transform:rotate(1deg)}}
 
   /* cappellino di Natale */
-  #hat{position:absolute;top:3vmin;left:calc(50% - 63vmin);width:24vmin;height:22vmin;transform:rotate(-30deg);
+  #hat{position:absolute;top:8vmin;left:calc(50% - 63vmin);width:24vmin;height:22vmin;transform:rotate(-30deg);
     display:none;overflow:visible;filter:drop-shadow(0 .8vmin 0 rgba(0,0,0,.08));z-index:2}
   body.xmas #hat{display:block}
   /* cornetti */
-  .horn{position:absolute;top:-7vmin;width:13vmin;height:17vmin;background:var(--skin-dk);
+  .horn{position:absolute;top:-2vmin;width:13vmin;height:17vmin;background:var(--skin-dk);
     border-radius:50% 50% 45% 45%;box-shadow:inset -1.2vmin -1.2vmin 0 rgba(0,0,0,.06)}
   .horn.l{left:calc(50% - 42vmin);transform:rotate(-18deg)}
   .horn.r{right:calc(50% - 42vmin);transform:rotate(18deg)}
@@ -61,7 +61,7 @@
   .freckle{position:absolute;width:1.6vmin;height:1.6vmin;border-radius:50%;background:var(--skin-dk);opacity:.8}
 
   /* occhi */
-  #eyes{position:absolute;left:50%;top:15%;width:0;height:0;
+  #eyes{position:absolute;left:50%;top:22%;width:0;height:0;
     transform:translate(var(--gx),var(--gy));transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
   .eye{position:absolute;width:31vmin;height:41vmin;top:0}
   .eye.l{left:-38vmin}.eye.r{left:7vmin}
@@ -84,20 +84,20 @@
   body.e-ouch .arc.ouch{opacity:1}
 
   /* guance */
-  .cheek{position:absolute;top:56%;width:15vmin;height:8vmin;border-radius:50%;background:var(--cheek);
+  .cheek{position:absolute;top:64%;width:15vmin;height:8vmin;border-radius:50%;background:var(--cheek);
     opacity:.55;filter:blur(.6vmin);transition:opacity .4s, transform .4s}
   .cheek.l{left:calc(50% - 50vmin)}.cheek.r{right:calc(50% - 50vmin)}
   body.blush .cheek{opacity:.95;transform:scale(1.2)}
 
   /* bocca */
-  #mouth{position:absolute;left:50%;top:60%;width:24vmin;height:14.4vmin;transform:translateX(-50%);overflow:visible}
+  #mouth{position:absolute;left:50%;top:67%;width:24vmin;height:14.4vmin;transform:translateX(-50%);overflow:visible}
   #mouth .ln{fill:none;stroke:var(--line);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
   #mouth .fill{fill:var(--line)}
   #mouth .tongue{fill:#ff8fa3}
   #mouth .fang{fill:#fff;stroke:var(--line);stroke-width:2.4;stroke-linejoin:round}
 
   /* zzz */
-  #zzz{position:absolute;left:calc(50% + 30vmin);top:10%;font-weight:700;font-size:7vmin;opacity:0;pointer-events:none}
+  #zzz{position:absolute;left:calc(50% + 30vmin);top:16%;font-weight:700;font-size:7vmin;opacity:0;pointer-events:none}
   body.sleeping #zzz{opacity:1}
   #zzz span{position:absolute;animation:zz 3s linear infinite;opacity:0}
   #zzz span:nth-child(2){animation-delay:1s;font-size:.75em}
@@ -111,7 +111,7 @@
 
   /* fumetto grande */
   #feat{position:absolute;inset:0;transform-origin:50% 100%;transition:transform .55s cubic-bezier(.3,1.4,.5,1)}
-  body.talking #feat{transform:translateY(16vh) scale(.72)}
+  body.talking #feat{transform:translateY(8vh) scale(.72)}
   #bubble{position:absolute;top:calc(3.5% + env(safe-area-inset-top));left:50%;
     width:min(80vw,980px);background:#fff;border-radius:6vmin;padding:4vmin 5vmin 4.4vmin;text-align:center;
     border:1.1vmin solid var(--skin-dk);
@@ -153,6 +153,18 @@
   .card .note{font-size:12.5px;opacity:.7;margin-top:10px;line-height:1.35}
   .close{margin-top:12px;width:100%;font:inherit;font-weight:600;border:0;border-radius:99px;padding:10px;background:var(--skin);color:var(--line)}
 
+  /* condividi */
+  #share{position:absolute;inset:0;background:rgba(58,42,72,.45);display:none;align-items:center;justify-content:center;z-index:10}
+  #share.open{display:flex}
+  #share .card{text-align:center;width:auto;max-width:92vw;display:flex;gap:22px;align-items:center}
+  #share img{width:min(62vh,320px);height:auto;border-radius:16px;display:block}
+  #share .side{max-width:240px;text-align:left}
+  #share .side h2{margin:0 0 6px}
+  #share .side p{margin:0 0 10px;font-size:14px;line-height:1.35;opacity:.8}
+  #share .url{font-size:13px;word-break:break-all;background:#f4f1f8;border-radius:10px;padding:8px 10px;margin-bottom:10px}
+  #share .btn{width:100%;font:inherit;font-weight:600;border:0;border-radius:99px;padding:10px;background:var(--skin);color:var(--line);margin-top:6px}
+  @media (orientation:portrait){#share .card{flex-direction:column}#share .side{text-align:center}}
+  #openShare{margin-top:12px;width:100%;font:inherit;font-weight:700;border:2px solid var(--skin-dk);border-radius:99px;padding:10px;background:#fff;color:var(--line)}
   /* schermata iniziale */
   #start{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:7vh;z-index:8}
   #start div{background:#fff;border-radius:99px;padding:2.4vmin 5vmin;font-weight:700;font-size:max(16px,4.6vmin);
@@ -168,12 +180,12 @@
     <path d="M30 70 Q40 52 50 44" stroke="#ff7d8e" stroke-width="5" fill="none" stroke-linecap="round"/>
     <rect x="6" y="84" width="74" height="20" rx="10" fill="#fff"/><circle cx="104" cy="38" r="11" fill="#fff"/></svg>
   <div id="feat">
-  <div class="freckle" style="left:calc(50% - 47vmin);top:52%"></div>
-  <div class="freckle" style="left:calc(50% - 43vmin);top:55.5%"></div>
-  <div class="freckle" style="left:calc(50% - 47.5vmin);top:58%"></div>
-  <div class="freckle" style="left:calc(50% + 45.5vmin);top:52%"></div>
-  <div class="freckle" style="left:calc(50% + 41.5vmin);top:55.5%"></div>
-  <div class="freckle" style="left:calc(50% + 46vmin);top:58%"></div>
+  <div class="freckle" style="left:calc(50% - 47vmin);top:60.0%"></div>
+  <div class="freckle" style="left:calc(50% - 43vmin);top:63.5%"></div>
+  <div class="freckle" style="left:calc(50% - 47.5vmin);top:66.0%"></div>
+  <div class="freckle" style="left:calc(50% + 45.5vmin);top:60.0%"></div>
+  <div class="freckle" style="left:calc(50% + 41.5vmin);top:63.5%"></div>
+  <div class="freckle" style="left:calc(50% + 46vmin);top:66.0%"></div>
   <div class="cheek l"></div><div class="cheek r"></div>
   <div id="eyes">
     <div class="eye l" id="eyeL">
@@ -197,6 +209,18 @@
 <button id="gear" aria-label="Impostazioni">⚙︎</button>
 <div id="start"><div>Tocca per svegliare Pucchi ✨</div></div>
 
+<div id="share">
+  <div class="card">
+    <img alt="QR code di Pucchi" src="data:image/png;base64,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">
+    <div class="side">
+      <h2>Adotta Pucchi! 💚</h2>
+      <p>Inquadra il codice con la fotocamera dell'iPhone, apri il link in Safari e poi Condividi → Aggiungi alla schermata Home.</p>
+      <div class="url">https://madebyandrea13.github.io/pucchi/</div>
+      <button class="btn" id="copyLink">Copia link</button>
+      <button class="btn" id="closeShare">Chiudi</button>
+    </div>
+  </div>
+</div>
 <div id="panel">
   <div class="card">
     <h2>Pucchi ⚙︎</h2>
@@ -211,9 +235,10 @@
       <button class="sw" data-v="giallo" style="background:#ffe28e"></button>
       <button class="sw" data-v="rosa" style="background:#ffbfd6"></button>
     </div></div>
-    <div class="row"><span>Schermo sempre acceso</span><b id="wlState">–</b></div>
+    <div class="row" id="wlRow" style="cursor:pointer"><span>Schermo sempre acceso</span><b id="wlState">–</b></div>
     <div class="note">Tocca Pucchi per un buffetto, strofina il dito per le coccole, e occhio a non toccargli gli occhi 👀.<br>
-      Se “Schermo sempre acceso” è ✗, apri la pagina direttamente in Safari, oppure imposta Blocco automatico su “Mai” mentre è sul caricatore.</div>
+      Se “Schermo sempre acceso” è ✗, toccalo per riprovare. Se resta ✗, imposta Impostazioni → Schermo e luminosità → Blocco automatico su “Mai” mentre Pucchi è sul caricatore.</div>
+    <button id="openShare">📲 Condividi Pucchi</button>
     <button class="close" id="closeP">Fatto</button>
   </div>
 </div>
@@ -618,12 +643,34 @@
 
   /* ---------- schermo sempre acceso ---------- */
   let wl=null;
-  async function keepAwake(){
-    try{ if('wakeLock' in navigator){ wl = await navigator.wakeLock.request('screen'); $('#wlState').textContent='✓';
-         wl.addEventListener('release',()=>{ $('#wlState').textContent='✗'; }); }
-         else $('#wlState').textContent='✗'; }
-    catch(e){ $('#wlState').textContent='✗'; }
+  const wlEl = ()=>$('#wlState');
+  let vid = null, awakeMode = '';
+  function setWL(ok, how){ awakeMode = ok ? how : ''; wlEl().textContent = ok ? '✓' : '✗ tocca per riprovare'; }
+  function videoFallback(){
+    try{
+      if(!vid){
+        vid=document.createElement('video');
+        vid.setAttribute('playsinline',''); vid.setAttribute('muted',''); vid.muted=true; vid.loop=true;
+        vid.style.cssText='position:fixed;width:1px;height:1px;opacity:0.01;pointer-events:none;left:0;top:0';
+        vid.src='data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAMwbW9vdgAAAGxtdmhkAAAAAAAAAAAAAAAAAAAD6AAAB9AAAQAAAQAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAlp0cmFrAAAAXHRraGQAAAADAAAAAAAAAAAAAAABAAAAAAAAB9AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAEAAAABAAAAAAAAkZWR0cwAAABxlbHN0AAAAAAAAAAEAAAfQAAAAAAABAAAAAAHSbWRpYQAAACBtZGhkAAAAAAAAAAAAAAAAAABAAAAAgABVxAAAAAAALWhkbHIAAAAAAAAAAHZpZGUAAAAAAAAAAAAAAABWaWRlb0hhbmRsZXIAAAABfW1pbmYAAAAUdm1oZAAAAAEAAAAAAAAAAAAAACRkaW5mAAAAHGRyZWYAAAAAAAAAAQAAAAx1cmwgAAAAAQAAAT1zdGJsAAAAvXN0c2QAAAAAAAAAAQAAAK1hdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAQABIAAAASAAAAAAAAAABFUxhdmM2MC4zMS4xMDIgbGlieDI2NAAAAAAAAAAAAAAAGP//AAAAM2F2Y0MBZAAK/+EAGGdkAAqs2UQmwEQAAAMABAAAAwAIPEiWWAEABGjvj8v9+PgAAAAAEHBhc3AAAAABAAAAAQAAABRidHJ0AAAAAAAAC5wAAAucAAAAGHN0dHMAAAAAAAAAAQAAAAIAAEAAAAAAFHN0c3MAAAAAAAAAAQAAAAEAAAAcc3RzYwAAAAAAAAABAAAAAQAAAAIAAAABAAAAHHN0c3oAAAAAAAAAAAAAAAIAAALYAAAADwAAABRzdGNvAAAAAAAAAAEAAANgAAAAYnVkdGEAAABabWV0YQAAAAAAAAAhaGRscgAAAAAAAAAAbWRpcmFwcGwAAAAAAAAAAAAAAAAtaWxzdAAAACWpdG9vAAAAHWRhdGEAAAABAAAAAExhdmY2MC4xNi4xMDAAAAAIZnJlZQAAAu9tZGF0AAACqgYF//+m3EXpvebZSLeWLNgg2SPu73gyNjQgLSBjb3JlIDE2NCByMzEwOCAzMWUxOWY5IC0gSC4yNjQvTVBFRy00IEFWQyBjb2RlYyAtIENvcHlsZWZ0IDIwMDMtMjAyMyAtIGh0dHA6Ly93d3cudmlkZW9sYW4ub3JnL3gyNjQuaHRtbCAtIG9wdGlvbnM6IGNhYmFjPTEgcmVmPTEgZGVibG9jaz0xOjA6MCBhbmFseXNlPTB4MzoweDMgbWU9aGV4IHN1Ym1lPTIgcHN5PTEgcHN5X3JkPTEuMDA6MC4wMCBtaXhlZF9yZWY9MCBtZV9yYW5nZT0xNiBjaHJvbWFfbWU9MSB0cmVsbGlzPTAgOHg4ZGN0PTEgY3FtPTAgZGVhZHpvbmU9MjEsMTEgZmFzdF9wc2tpcD0xIGNocm9tYV9xcF9vZmZzZXQ9MCB0aHJlYWRzPTIgbG9va2FoZWFkX3RocmVhZHM9MSBzbGljZWRfdGhyZWFkcz0wIG5yPTAgZGVjaW1hdGU9MSBpbnRlcmxhY2VkPTAgYmx1cmF5X2NvbXBhdD0wIGNvbnN0cmFpbmVkX2ludHJhPTAgYmZyYW1lcz0zIGJfcHlyYW1pZD0yIGJfYWRhcHQ9MSBiX2JpYXM9MCBkaXJlY3Q9MSB3ZWlnaHRiPTEgb3Blbl9nb3A9MCB3ZWlnaHRwPTEga2V5aW50PTI1MCBrZXlpbnRfbWluPTEgc2NlbmVjdXQ9NDAgaW50cmFfcmVmcmVzaD0wIHJjX2xvb2thaGVhZD0xMCByYz1jcmYgbWJ0cmVlPTEgY3JmPTIzLjAgcWNvbXA9MC42MCBxcG1pbj0wIHFwbWF4PTY5IHFwc3RlcD00IGlwX3JhdGlvPTEuNDAgYXE9MToxLjAwAIAAAAAmZYiEABb/7H/CVX/RApEebX/ffNDrXyp7sd72GXweuTv0HWAhNe0AAAALQZohGIK//talm0A=';
+        document.body.appendChild(vid);
+      }
+      const pr=vid.play(); if(pr&&pr.then) pr.then(()=>setWL(true,'video')).catch(()=>setWL(false)); else setWL(true,'video');
+    }catch(e){ setWL(false); }
   }
+  async function keepAwake(){
+    if (awakeMode==='lock' && wl && !wl.released) return;
+    try{
+      if('wakeLock' in navigator){
+        wl = await navigator.wakeLock.request('screen'); setWL(true,'lock');
+        wl.addEventListener('release',()=>{ if(awakeMode==='lock') setWL(false); });
+        return;
+      }
+    }catch(e){}
+    videoFallback();
+  }
+  // ogni tocco riprova se lo schermo non è bloccato acceso
+  document.addEventListener('pointerdown', ()=>{ if(started && !awakeMode) keepAwake(); }, true);
   document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible' && started) keepAwake(); });
 
   /* ---------- avvio ---------- */
@@ -637,6 +684,20 @@
       setMood('happy',2400); SFX.giggle(); anim('squish'); say(hi);
     },700);
     schedule(); nextEvent = Date.now()+rnd(25,45)*1000;
+  });
+
+  $('#wlRow').addEventListener('click', ()=>{ awakeMode=''; keepAwake(); });
+
+  /* ---------- condividi ---------- */
+  const share=$('#share');
+  $('#openShare').addEventListener('click', ()=>{ panel.classList.remove('open'); share.classList.add('open'); });
+  $('#closeShare').addEventListener('click', ()=>share.classList.remove('open'));
+  share.addEventListener('pointerdown', e=>{ e.stopPropagation(); if(e.target===share) share.classList.remove('open'); });
+  $('#copyLink').addEventListener('click', async e=>{
+    const b=e.currentTarget, u='https://madebyandrea13.github.io/pucchi/';
+    try{ await navigator.clipboard.writeText(u); }
+    catch(_){ const t=document.createElement('textarea'); t.value=u; document.body.appendChild(t); t.select(); try{document.execCommand('copy');}catch(__){} t.remove(); }
+    b.textContent='✓ COPIATO'; setTimeout(()=>b.textContent='Copia link',2500);
   });
 
   /* ---------- pannello ---------- */
