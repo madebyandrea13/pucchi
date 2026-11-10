@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="menta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pucchi">
+<meta name="theme-color" id="tc" content="#9fe3c9">
+<title>Pucchi – mostriciattolo da compagnia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --skin:#9fe3c9; --skin-hi:#c3f2df; --skin-dk:#74c9a9;
+    --line:#3a2a48; --eye:#2d2440; --cheek:#ff9fb6;
+    --gx:0vmin; --gy:0vmin;
+  }
+  html[data-theme="lilla"]{--skin:#cbb8f4;--skin-hi:#e3d8fb;--skin-dk:#a993e3}
+  html[data-theme="pesca"]{--skin:#ffc6a8;--skin-hi:#ffe0cf;--skin-dk:#f2a27e}
+  html[data-theme="azzurro"]{--skin:#a9d9ff;--skin-hi:#d2ecff;--skin-dk:#7fbdf0}
+  html[data-theme="giallo"]{--skin:#ffe28e;--skin-hi:#fff1c4;--skin-dk:#f2c85a}
+  html[data-theme="rosa"]{--skin:#ffbfd6;--skin-hi:#ffdfeb;--skin-dk:#f497b9}
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--skin)}
+  body{
+    font-family:'Fredoka',ui-rounded,system-ui,sans-serif;color:var(--line);
+    user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;
+    transition:background .6s;
+  }
+  #face{
+    position:fixed;inset:0;overflow:hidden;
+    background:radial-gradient(ellipse 75% 85% at 50% 42%, var(--skin-hi) 0%, var(--skin) 55%, var(--skin-dk) 100%);
+    animation:breathe 4.5s ease-in-out infinite;
+    transform-origin:50% 100%;
+  }
+  body.sleeping #face{animation-duration:7s}
+  @keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.008,1.018)}}
+  #face.squish{animation:squish .45s cubic-bezier(.3,1.6,.5,1)}
+  @keyframes squish{0%{transform:scale(1,1)}30%{transform:scale(1.05,.93)}60%{transform:scale(.98,1.04)}100%{transform:scale(1,1)}}
+  #face.wiggle{animation:wiggle .7s ease-in-out}
+  @keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-1.6deg)}40%{transform:rotate(1.6deg)}60%{transform:rotate(-1deg)}80%{transform:rotate(1deg)}}
+
+  /* cappellino di Natale */
+  #hat{position:absolute;top:3vmin;left:calc(50% - 63vmin);width:24vmin;height:22vmin;transform:rotate(-30deg);
+    display:none;overflow:visible;filter:drop-shadow(0 .8vmin 0 rgba(0,0,0,.08));z-index:2}
+  body.xmas #hat{display:block}
+  /* cornetti */
+  .horn{position:absolute;top:-7vmin;width:13vmin;height:17vmin;background:var(--skin-dk);
+    border-radius:50% 50% 45% 45%;box-shadow:inset -1.2vmin -1.2vmin 0 rgba(0,0,0,.06)}
+  .horn.l{left:calc(50% - 42vmin);transform:rotate(-18deg)}
+  .horn.r{right:calc(50% - 42vmin);transform:rotate(18deg)}
+  .horn::after{content:"";position:absolute;left:30%;top:52%;width:28%;height:22%;border-radius:50%;background:rgba(255,255,255,.35)}
+
+  /* lentiggini */
+  .freckle{position:absolute;width:1.6vmin;height:1.6vmin;border-radius:50%;background:var(--skin-dk);opacity:.8}
+
+  /* occhi */
+  #eyes{position:absolute;left:50%;top:15%;width:0;height:0;
+    transform:translate(var(--gx),var(--gy));transition:transform .35s cubic-bezier(.3,1.3,.5,1)}
+  .eye{position:absolute;width:31vmin;height:41vmin;top:0}
+  .eye.l{left:-38vmin}.eye.r{left:7vmin}
+  .ball{position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 50% 70%,#4a3c66 0%,var(--eye) 65%);
+    transition:transform .09s ease-in, opacity .15s;transform-origin:50% 55%;
+    box-shadow:0 1.2vmin 0 rgba(0,0,0,.08)}
+  .ball i{position:absolute;border-radius:50%;background:#fff;transition:transform .35s}
+  .ball .h1{width:36%;height:30%;left:16%;top:14%}
+  .ball .h2{width:14%;height:12%;left:60%;top:52%;opacity:.9}
+  .ball .h3{width:9%;height:8%;left:24%;top:52%;opacity:.7}
+  .eye.blink .ball{transform:scaleY(.07)}
+  body.e-closed .ball{transform:scaleY(.07)}
+  body.e-half .ball{transform:scaleY(.45) translateY(18%)}
+  body.e-wide .ball{transform:scale(1.09)}
+  body.e-wide .ball .h1{transform:scale(1.15)}
+  .arc{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .12s;overflow:visible}
+  .arc path{fill:none;stroke:var(--eye);stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+  body.e-happy .ball, body.e-ouch .ball{opacity:0}
+  body.e-happy .arc.happy{opacity:1}
+  body.e-ouch .arc.ouch{opacity:1}
+
+  /* guance */
+  .cheek{position:absolute;top:56%;width:15vmin;height:8vmin;border-radius:50%;background:var(--cheek);
+    opacity:.55;filter:blur(.6vmin);transition:opacity .4s, transform .4s}
+  .cheek.l{left:calc(50% - 50vmin)}.cheek.r{right:calc(50% - 50vmin)}
+  body.blush .cheek{opacity:.95;transform:scale(1.2)}
+
+  /* bocca */
+  #mouth{position:absolute;left:50%;top:60%;width:24vmin;height:14.4vmin;transform:translateX(-50%);overflow:visible}
+  #mouth .ln{fill:none;stroke:var(--line);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+  #mouth .fill{fill:var(--line)}
+  #mouth .tongue{fill:#ff8fa3}
+  #mouth .fang{fill:#fff;stroke:var(--line);stroke-width:2.4;stroke-linejoin:round}
+
+  /* zzz */
+  #zzz{position:absolute;left:calc(50% + 30vmin);top:10%;font-weight:700;font-size:7vmin;opacity:0;pointer-events:none}
+  body.sleeping #zzz{opacity:1}
+  #zzz span{position:absolute;animation:zz 3s linear infinite;opacity:0}
+  #zzz span:nth-child(2){animation-delay:1s;font-size:.75em}
+  #zzz span:nth-child(3){animation-delay:2s;font-size:.55em}
+  @keyframes zz{0%{transform:translate(0,4vmin);opacity:0}20%{opacity:.8}100%{transform:translate(8vmin,-10vmin);opacity:0}}
+
+  /* cuoricini e particelle */
+  .pop{position:absolute;pointer-events:none;font-size:6vmin;animation:pop 1.4s ease-out forwards}
+  @keyframes pop{0%{transform:translate(-50%,-50%) scale(.3);opacity:0}15%{opacity:1;transform:translate(-50%,-60%) scale(1.1)}
+    100%{transform:translate(calc(-50% + var(--dx)),-260%) scale(.8);opacity:0}}
+
+  /* fumetto grande */
+  #feat{position:absolute;inset:0;transform-origin:50% 100%;transition:transform .55s cubic-bezier(.3,1.4,.5,1)}
+  body.talking #feat{transform:translateY(16vh) scale(.72)}
+  #bubble{position:absolute;top:calc(3.5% + env(safe-area-inset-top));left:50%;
+    width:min(80vw,980px);background:#fff;border-radius:6vmin;padding:4vmin 5vmin 4.4vmin;text-align:center;
+    border:1.1vmin solid var(--skin-dk);
+    font-size:max(24px,7.6vmin);font-weight:700;line-height:1.15;box-shadow:0 1.8vmin 0 rgba(0,0,0,.12);
+    transform-origin:50% 120%;transform:translateX(-50%) scale(0);opacity:0;
+    transition:transform .4s cubic-bezier(.3,1.6,.5,1),opacity .2s;z-index:5}
+  #bubble.show{transform:translateX(-50%) scale(1);opacity:1}
+  #bubble::after{content:"";position:absolute;bottom:-4.4vmin;left:50%;width:7vmin;height:7vmin;background:#fff;
+    border-right:1.1vmin solid var(--skin-dk);border-bottom:1.1vmin solid var(--skin-dk);
+    transform:translateX(-50%) rotate(45deg);border-radius:0 0 1.6vmin 0}
+  #btns{display:flex;gap:3vmin;margin-top:3.4vmin;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+  #btns:empty{display:none}
+  #btns button{font:inherit;font-size:max(20px,6vmin);font-weight:700;border:0;border-radius:99px;padding:2.2vmin 6vmin;
+    background:var(--skin);color:var(--line);box-shadow:0 1.1vmin 0 var(--skin-dk);cursor:pointer;min-width:24vmin}
+  #btns button:active{transform:translateY(.8vmin);box-shadow:0 .3vmin 0 var(--skin-dk)}
+
+  /* orologio */
+  #clock{position:absolute;top:calc(3vmin + env(safe-area-inset-top));right:calc(3vmin + env(safe-area-inset-right));
+    background:rgba(255,255,255,.55);border-radius:99px;padding:1.2vmin 3.2vmin;font-weight:700;
+    font-size:max(18px,6vmin);letter-spacing:.04em;font-variant-numeric:tabular-nums;z-index:4;
+    box-shadow:0 .8vmin 0 rgba(0,0,0,.06);transition:opacity .3s}
+  #clock .c{animation:colon 2s steps(1) infinite}
+  @keyframes colon{50%{opacity:.25}}
+  body.noclock #clock, body.talking #clock{opacity:0}
+
+  /* impostazioni */
+  #gear{position:absolute;right:calc(2vmin + env(safe-area-inset-right));bottom:calc(2vmin + env(safe-area-inset-bottom));
+    width:9vmin;height:9vmin;min-width:36px;min-height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.35);
+    color:var(--line);font-size:max(16px,4.4vmin);opacity:.45;z-index:6}
+  #panel{position:absolute;inset:0;background:rgba(58,42,72,.35);display:none;align-items:center;justify-content:center;z-index:9}
+  #panel.open{display:flex}
+  .card{background:#fff;border-radius:22px;padding:18px 22px;width:min(92vw,520px);max-height:90vh;overflow:auto;font-size:15px}
+  .card h2{margin:0 0 10px;font-size:20px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed #eee}
+  .seg{display:flex;gap:6px;flex-wrap:wrap}
+  .seg button{font:inherit;font-size:14px;border:2px solid #eee;background:#fff;border-radius:99px;padding:5px 12px;color:var(--line)}
+  .seg button.on{background:var(--skin);border-color:var(--skin-dk)}
+  .sw{width:26px;height:26px;border-radius:50%;padding:0!important}
+  .card .note{font-size:12.5px;opacity:.7;margin-top:10px;line-height:1.35}
+  .close{margin-top:12px;width:100%;font:inherit;font-weight:600;border:0;border-radius:99px;padding:10px;background:var(--skin);color:var(--line)}
+
+  /* schermata iniziale */
+  #start{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:7vh;z-index:8}
+  #start div{background:#fff;border-radius:99px;padding:2.4vmin 5vmin;font-weight:700;font-size:max(16px,4.6vmin);
+    box-shadow:0 1.2vmin 0 rgba(0,0,0,.1);animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-1.2vmin)}}
+  body.night #face{filter:brightness(.82) saturate(.85)}
+</style>
+</head>
+<body data-theme="menta" class="sleeping e-closed">
+<div id="face">
+  <div class="horn l"></div><div class="horn r"></div>
+  <svg id="hat" viewBox="0 0 120 110"><path d="M14 92 Q30 40 62 18 Q92 2 104 34 Q96 26 84 30 Q70 46 70 92Z" fill="#e8455a"/>
+    <path d="M30 70 Q40 52 50 44" stroke="#ff7d8e" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <rect x="6" y="84" width="74" height="20" rx="10" fill="#fff"/><circle cx="104" cy="38" r="11" fill="#fff"/></svg>
+  <div id="feat">
+  <div class="freckle" style="left:calc(50% - 47vmin);top:52%"></div>
+  <div class="freckle" style="left:calc(50% - 43vmin);top:55.5%"></div>
+  <div class="freckle" style="left:calc(50% - 47.5vmin);top:58%"></div>
+  <div class="freckle" style="left:calc(50% + 45.5vmin);top:52%"></div>
+  <div class="freckle" style="left:calc(50% + 41.5vmin);top:55.5%"></div>
+  <div class="freckle" style="left:calc(50% + 46vmin);top:58%"></div>
+  <div class="cheek l"></div><div class="cheek r"></div>
+  <div id="eyes">
+    <div class="eye l" id="eyeL">
+      <div class="ball"><i class="h1"></i><i class="h2"></i><i class="h3"></i></div>
+      <svg class="arc happy" viewBox="0 0 100 130"><path d="M12 82 Q50 22 88 82"/></svg>
+      <svg class="arc ouch" viewBox="0 0 100 130"><path d="M18 38 L82 66 L18 94"/></svg>
+    </div>
+    <div class="eye r" id="eyeR">
+      <div class="ball"><i class="h1"></i><i class="h2"></i><i class="h3"></i></div>
+      <svg class="arc happy" viewBox="0 0 100 130"><path d="M12 82 Q50 22 88 82"/></svg>
+      <svg class="arc ouch" viewBox="0 0 100 130"><path d="M82 38 L18 66 L82 94"/></svg>
+    </div>
+  </div>
+  <svg id="mouth" viewBox="0 0 100 60"></svg>
+  </div>
+  <div id="zzz"><span>z</span><span>z</span><span>z</span></div>
+</div>
+
+<div id="clock"><span id="hh">--</span><span class="c">:</span><span id="mm">--</span></div>
+<div id="bubble"><div id="btext"></div><div id="btns"></div></div>
+<button id="gear" aria-label="Impostazioni">⚙︎</button>
+<div id="start"><div>Tocca per svegliare Pucchi ✨</div></div>
+
+<div id="panel">
+  <div class="card">
+    <h2>Pucchi ⚙︎</h2>
+    <div class="row"><span>Versetti</span><div class="seg" id="sSound"><button data-v="1">Sì</button><button data-v="0">Muto</button></div></div>
+    <div class="row"><span>Chiacchiere</span><div class="seg" id="sChat"><button data-v="0">Poche</button><button data-v="1">Normali</button><button data-v="2">Tante</button></div></div>
+    <div class="row"><span>Orologio</span><div class="seg" id="sClock"><button data-v="1">Sì</button><button data-v="0">No</button></div></div>
+    <div class="row"><span>Colore</span><div class="seg" id="sTheme">
+      <button class="sw" data-v="menta" style="background:#9fe3c9"></button>
+      <button class="sw" data-v="lilla" style="background:#cbb8f4"></button>
+      <button class="sw" data-v="pesca" style="background:#ffc6a8"></button>
+      <button class="sw" data-v="azzurro" style="background:#a9d9ff"></button>
+      <button class="sw" data-v="giallo" style="background:#ffe28e"></button>
+      <button class="sw" data-v="rosa" style="background:#ffbfd6"></button>
+    </div></div>
+    <div class="row"><span>Schermo sempre acceso</span><b id="wlState">–</b></div>
+    <div class="note">Tocca Pucchi per un buffetto, strofina il dito per le coccole, e occhio a non toccargli gli occhi 👀.<br>
+      Se “Schermo sempre acceso” è ✗, apri la pagina direttamente in Safari, oppure imposta Blocco automatico su “Mai” mentre è sul caricatore.</div>
+    <button class="close" id="closeP">Fatto</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const body = document.body, face = $('#face'), mouth = $('#mouth');
+  const rnd = (a,b) => a + Math.random()*(b-a);
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+
+  /* ---------- impostazioni ---------- */
+  const S = {sound:1, chat:1, theme:'menta', clock:1};
+  try { Object.assign(S, JSON.parse(localStorage.getItem('pucchi')||'{}')); } catch(e){}
+  const COLORS={menta:'#9fe3c9',lilla:'#cbb8f4',pesca:'#ffc6a8',azzurro:'#a9d9ff',giallo:'#ffe28e',rosa:'#ffbfd6'};
+  const applyTheme = () => { document.documentElement.dataset.theme = S.theme; body.classList.toggle('noclock', !S.clock); body.dataset.theme = S.theme; const t=document.getElementById('tc'); if(t) t.content = COLORS[S.theme]||COLORS.menta; };
+  const save = () => { try { localStorage.setItem('pucchi', JSON.stringify(S)); } catch(e){} };
+  applyTheme();
+
+  /* ---------- bocche ---------- */
+  const M = {
+    w:     '<path class="ln" d="M24 22 Q37 37 50 22 Q63 37 76 22"/><path class="fang" d="M57 28 L61.5 38 L66 28.5Z"/>',
+    open:  '<path class="fill" d="M24 16 Q50 66 76 16 Q50 24 24 16Z"/><path class="tongue" d="M37 37 Q50 28 63 37 Q58 48 50 48 Q42 48 37 37Z"/>',
+    o:     '<ellipse class="fill" cx="50" cy="30" rx="8" ry="10"/>',
+    small: '<ellipse class="fill" cx="50" cy="30" rx="4.5" ry="3.6"/>',
+    sad:   '<path class="ln" d="M33 38 Q50 22 67 38"/>',
+    hmm:   '<path class="ln" d="M34 30 Q42 24 50 30 Q58 36 66 30"/>',
+    yawn:  '<ellipse class="fill" cx="50" cy="30" rx="11" ry="17"/><ellipse class="tongue" cx="50" cy="40" rx="6" ry="4"/>'
+  };
+  const MOODS = {
+    idle:{e:'',m:'w'}, happy:{e:'happy',m:'open'}, purr:{e:'happy',m:'w'},
+    curious:{e:'wide',m:'o'}, surprised:{e:'wide',m:'o'}, sleepy:{e:'half',m:'hmm'},
+    sleep:{e:'closed',m:'small'}, sad:{e:'',m:'sad'}, ouch:{e:'ouch',m:'o'},
+    yawn:{e:'closed',m:'yawn'}, think:{e:'',m:'hmm'}
+  };
+  let mood = 'sleep', moodTimer = null;
+  function setMood(m, dur){
+    mood = m; const d = MOODS[m];
+    body.classList.remove('e-happy','e-closed','e-half','e-ouch','e-wide');
+    if (d.e) body.classList.add('e-'+d.e);
+    body.classList.toggle('sleeping', m==='sleep');
+    mouth.innerHTML = M[d.m];
+    clearTimeout(moodTimer);
+    if (dur) moodTimer = setTimeout(() => setMood(isNight() && Math.random()<.3 ? 'sleepy':'idle'), dur);
+  }
+
+  /* ---------- audio (versetti sintetizzati) ---------- */
+  let ac = null;
+  function initAudio(){ try{ if(!ac) ac = new (window.AudioContext||window.webkitAudioContext)(); if(ac.state==='suspended') ac.resume(); }catch(e){} }
+  function tone(f0,f1,dur,type='sine',vol=.13,delay=0){
+    if(!S.sound || !ac) return;
+    const t = ac.currentTime + delay, o = ac.createOscillator(), g = ac.createGain();
+    o.type = type; o.frequency.setValueAtTime(f0,t); o.frequency.exponentialRampToValueAtTime(f1,t+dur);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+.015); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(ac.destination); o.start(t); o.stop(t+dur+.02);
+  }
+  const SFX = {
+    chirp:  () => tone(700,1350,.13),
+    giggle: () => { [0,.11,.22,.33].forEach((d,i)=>tone(900+i*90,1500+i*90,.08,'sine',.11,d)); },
+    ask:    () => { tone(480,520,.12,'sine',.12); tone(560,980,.22,'sine',.12,.13); },
+    boop:   () => tone(1300,1700,.07,'triangle',.12),
+    ouch:   () => { tone(1100,420,.22,'triangle',.14); },
+    yawn:   () => { tone(520,700,.25,'triangle',.1); tone(700,260,.8,'triangle',.1,.25); },
+    sneeze: () => { tone(500,900,.25,'sine',.08); tone(1400,300,.18,'sawtooth',.06,.35); },
+    sad:    () => tone(600,380,.4,'sine',.1),
+    purr:   () => {
+      if(!S.sound||!ac) return;
+      const t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain(),l=ac.createOscillator(),lg=ac.createGain();
+      o.type='triangle';o.frequency.value=95;l.frequency.value=22;lg.gain.value=.05;
+      g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(.06,t+.15);g.gain.linearRampToValueAtTime(0.0001,t+1.1);
+      l.connect(lg).connect(g.gain);o.connect(g).connect(ac.destination);o.start(t);l.start(t);o.stop(t+1.2);l.stop(t+1.2);
+    },
+    babble: (n) => { const k=Math.min(9,Math.max(3,Math.round(n/6))); const base=rnd(650,850);
+      for(let i=0;i<k;i++) tone(base*rnd(.8,1.35), base*rnd(.9,1.5), .065,'sine',.09,i*.085); }
+  };
+
+  /* ---------- occhi: battito e sguardo ---------- */
+  const eyesEls = [$('#eyeL'), $('#eyeR')];
+  function blink(){
+    if (mood==='sleep'||mood==='yawn') return;
+    eyesEls.forEach(e=>e.classList.add('blink'));
+    setTimeout(()=>eyesEls.forEach(e=>e.classList.remove('blink')), 120);
+  }
+  (function blinkLoop(){
+    blink(); if (Math.random()<.2) setTimeout(blink, 260);
+    setTimeout(blinkLoop, rnd(2500, 6500));
+  })();
+  function look(x,y){ face.style.setProperty('--gx', x+'vmin'); face.style.setProperty('--gy', y+'vmin'); }
+  let holdGaze = 0;
+  (function lookLoop(){
+    if (Date.now() > holdGaze && mood!=='sleep'){
+      const r = Math.random();
+      if (r<.35) look(0,0); else look(rnd(-6,6), rnd(-3,3.5));
+    }
+    setTimeout(lookLoop, rnd(1800, 5200));
+  })();
+  function lookAround(){
+    holdGaze = Date.now()+2600;
+    [[-6,-1],[6,-1],[-5,2],[0,0]].forEach((p,i)=>setTimeout(()=>look(...p), i*600));
+  }
+
+  /* ---------- effetti ---------- */
+  function anim(cls){ face.classList.remove('squish','wiggle'); void face.offsetWidth; face.classList.add(cls);
+    setTimeout(()=>face.classList.remove(cls), 800); }
+  function pop(x,y,ch){
+    const s=document.createElement('span'); s.className='pop'; s.textContent=ch||pick(['💗','💕','✨','💖']);
+    s.style.left=x+'px'; s.style.top=y+'px'; s.style.setProperty('--dx', rnd(-40,40)+'px');
+    document.body.appendChild(s); setTimeout(()=>s.remove(), 1500);
+  }
+
+  /* ---------- fumetto ---------- */
+  const bubble=$('#bubble'), btext=$('#btext'), btns=$('#btns');
+  let bubbleTimer=null, bubbleOpen=false;
+  function say(text, answers, dur){
+    clearTimeout(bubbleTimer);
+    btext.textContent = text; btns.innerHTML='';
+    (answers||[]).forEach(a=>{
+      const b=document.createElement('button'); b.textContent=a.t;
+      b.addEventListener('pointerdown', ev=>{ ev.stopPropagation(); });
+      b.addEventListener('click', ev=>{ ev.stopPropagation(); touched(); hideBubble(); setTimeout(()=>react(a.r),250); });
+      btns.appendChild(b);
+    });
+    bubble.classList.add('show'); body.classList.add('talking'); bubbleOpen=true;
+    holdGaze = Date.now()+3000; look(0,-3);
+    SFX.babble(text.length);
+    bubbleTimer = setTimeout(()=>{
+      hideBubble();
+      if (answers && answers.length){ setMood('sad', 2200); SFX.sad(); }
+    }, dur || (answers ? 16000 : 5200));
+  }
+  function hideBubble(){ bubble.classList.remove('show'); body.classList.remove('talking'); bubbleOpen=false; clearTimeout(bubbleTimer); }
+  function react(r){
+    if (!r) return;
+    if (r.mood) setMood(r.mood, r.dur||2600);
+    if (r.sfx) SFX[r.sfx]();
+    if (r.anim) anim(r.anim);
+    if (r.hearts){ const W=innerWidth,H=innerHeight; for(let i=0;i<5;i++) setTimeout(()=>pop(W/2+rnd(-W*.25,W*.25), H*.6),i*120); }
+    if (r.say) setTimeout(()=>say(r.say, null, 3800), 350);
+  }
+
+  /* ---------- repertorio ---------- */
+  /* ---------- reazioni rapide ---------- */
+  const yay   = t=>({mood:'happy', sfx:'giggle', anim:'squish', say:t});
+  const purr  = t=>({mood:'purr', sfx:'purr', say:t});
+  const cur   = t=>({mood:'curious', sfx:'chirp', say:t});
+  const think = t=>({mood:'think', sfx:'ask', say:t});
+  const sad   = t=>({mood:'sad', sfx:'sad', say:t});
+  const love  = t=>({mood:'purr', sfx:'purr', hearts:1, say:t});
+  const eek   = t=>({mood:'ouch', sfx:'boop', anim:'wiggle', say:t});
+  const Q = (b,q,a1,r1,a2,r2)=>({b,q,a:[{t:a1,r:r1},{t:a2,r:r2}]});
+
+  /* ---------- domande (b = fascia: any, mattina, pranzo, pomeriggio, sera, notte) ---------- */
+  const QUESTIONS = [
+    // sempre
+    Q('any','Stai scrivendo qualcosa di bello? ✍️','Sì!',yay('Lo sapevo! Vai vai vai!'),'Ci provo…',purr('Una riga alla volta. Io tifo per te!')),
+    Q('any','Hai bevuto un po\' d\'acqua? 💧','Sì',yay('Bravo! Glu glu glu!'),'Ora vado',cur('Ti aspetto qui! Non scappo.')),
+    Q('any','Mi fai una carezza? 🥺','Ecco!',love('Mrrrrrr… 💕'),'Dopo',sad('Va bene… me ne devi una.')),
+    Q('any','Come va la storia?','Alla grande',yay('Evviva! Poi me la leggi?'),'Mah…',think('Prova a far succedere qualcosa di strano!')),
+    Q('any','Facciamo stretching? Spalle giù! 🙆','Fatto',yay('Che elegante!'),'Nah',sad('Le spalle piangono in silenzio…')),
+    Q('any','Posso sbirciare cosa scrivi? 👀','Sì',cur('Ooooh… non capisco niente ma mi piace!'),'No!',eek('Ok ok, chiudo gli occhi!')),
+    Q('any','Ti va una pausetta?','Sì',yay('Pausaaa! Io faccio le bolle.'),'Ancora un po\'',cur('Allora ti faccio la guardia!')),
+    Q('any','Secondo te i mostri sognano?','Certo',yay('Io sogno nuvole di zucchero!'),'Boh',think('Stanotte controllo e ti dico.')),
+    Q('any','Mi dai un nome segreto?','Ci penso',yay('Intanto sono Pucchi!'),'Pucchi va benissimo',yay('Pucchi! Pucchi! 💚')),
+    Q('any','Hai una idea pazza oggi? 💡','Sì!',yay('Le idee pazze sono le mie preferite!'),'Non ancora',think('Arriverà. Le idee pazze sono timide.')),
+    Q('any','Draghi o robot?','Draghi 🐉',yay('ROAAAR! Cioè… roar piccolino.'),'Robot 🤖',cur('Bip bop! Ti voglio bip bene.')),
+    Q('any','Ti racconto un segreto?','Sì!',cur('Ho paura dei calzini spaiati. Shhh!'),'Dopo',sad('Ok… me lo tengo nel pancino.')),
+    Q('any','Raddrizza la schiena! Sembri un punto interrogativo ❓','Fatto',yay('Ora sei un punto esclamativo!'),'Ops',eek('Su su su!')),
+    Q('any','Quanti caffè oggi? ☕','Pochi',yay('Bravo! Il cuore ringrazia.'),'Ho perso il conto',eek('Tremolo tremolo…')),
+    Q('any','Giochiamo a chi sbatte le palpebre per ultimo?','Ok!',cur('Pronti… via! …ho perso subito.'),'No',sad('Uffa, ero bravissimo.')),
+    Q('any','Mi presti una parola difficile?','Eccola',yay('Me la tengo nel taschino!'),'Non ora',think('La cerco da solo… “pantofola”?')),
+    Q('any','Occhi stanchi? Guarda lontano per 20 secondi 👀','Fatto',yay('Occhietti riposati! Come i miei.'),'Dopo',sad('Gli occhi si offendono, eh…')),
+    Q('any','Mettiamo un po\' di musica? 🎵','Sì',yay('Io ballo con le orecchie!'),'Silenzio',purr('Ok, silenzio morbido.')),
+    Q('any','Il protagonista ti sta simpatico?','Molto',yay('Allora anche a me!'),'È un cattivo',eek('Brrr… mi nascondo dietro di te.')),
+    Q('any','Mi dai un cinque? ✋','Cinque!',yay('Pat! Che cinque potente!'),'Dopo',sad('Tengo la manina alzata…')),
+    Q('any','Sei fiero di qualcosa che hai fatto oggi?','Sì',love('Anche io sono fiero di te!'),'Non ancora',purr('C\'è tempo. Anche una cosa piccola vale.')),
+    Q('any','Io ho un po\' di fame. Tu? 🍪','Sì',yay('Facciamo squadra: fame insieme!'),'No',think('Allora mangio io per tutti e due.')),
+    // mattina
+    Q('mattina','Buongiorno! Hai fatto colazione? 🥐','Sì',yay('Bravo! La colazione è magia.'),'Non ancora',cur('Vai! Io ti aspetto con la bava.')),
+    Q('mattina','Io ho fame! Tu? Brioche? 🥐','Tantissima',yay('Due brioche! Una per me, eh!'),'Ho già mangiato',sad('E le briciole per me?')),
+    Q('mattina','Il caffè è pronto? ☕','Sì',yay('Che profumino! Sniff sniff.'),'Ora lo faccio',cur('Brrrr, la moka canta!')),
+    Q('mattina','Hai dormito bene? 😴','Benissimo',yay('Anche io! Ho sognato biscotti.'),'Così così',purr('Oggi andiamo piano piano, ok?')),
+    Q('mattina','Cosa facciamo di bello oggi?','Tante cose!',yay('Che giornatona!'),'Vediamo',think('Mi piacciono le giornate a sorpresa.')),
+    Q('mattina','Apriamo la finestra? Aria fresca! 🌬️','Fatto',yay('Fresco fresco!'),'Fa freddo',eek('Brrr! Hai ragione, chiudi!')),
+    // pranzo
+    Q('pranzo','Io ho fame… tu? 🍝','Tantissima',yay('Pancini in coro: grooool!'),'Non ancora',sad('Io sì però… tanto.')),
+    Q('pranzo','Cosa si mangia oggi?','Pasta! 🍝',yay('Pasta! Il mio numero preferito.'),'Sorpresa',cur('Ooh, un pranzo misterioso!')),
+    Q('pranzo','Pausa pranzo? Il cervello va a tortellini!','Vado',yay('Buon appetito! Torna presto!'),'Ancora 5 minuti',think('Cinque minuti mostro o cinque minuti veri?')),
+    Q('pranzo','Mi porti un pezzettino di quello che mangi?','Ok',love('Gnam! Grazie! 💕'),'È tutto mio',sad('Egoista… ma ti voglio bene uguale.')),
+    Q('pranzo','Hai mangiato seduto o davanti allo schermo?','Seduto',yay('Bravo! Il cibo va guardato negli occhi.'),'Ops…',eek('Lo sapevo! Briciole sulla tastiera!')),
+    // pomeriggio
+    Q('pomeriggio','Ora di merenda? Ho un buco nella pancia! 🍪','Sì!',yay('Merendaaa! Io voglio il biscotto grande.'),'Resisto',sad('Il mio pancino non resiste…')),
+    Q('pomeriggio','Merenda dolce o salata?','Dolce 🍫',yay('Cioccolato! Il mio cuore fa bum.'),'Salata 🥨',cur('Crunch crunch! Ottima scelta.')),
+    Q('pomeriggio','Abbiocco del pomeriggio. Anche tu? 😪','Sì',purr('Facciamo finta di lavorare con gli occhi chiusi.'),'Sveglissimo',yay('Wow! Mi presti un po\' di energia?')),
+    Q('pomeriggio','Un caffettino per il pomeriggio? ☕','Sì',yay('Ricarica in corso!'),'No',cur('Allora una bella sorsata d\'acqua!')),
+    Q('pomeriggio','Due passi? Anche solo fino al frigo.','Vado',yay('Saluta il frigo da parte mia!'),'Dopo',sad('Il frigo si sente solo…')),
+    Q('pomeriggio','A che punto sei con le cose di oggi?','Avanti',yay('Grande! Sei un razzo!'),'Indietro',purr('Una cosa alla volta. Ce la fai.')),
+    // sera
+    Q('sera','Io ho fame! Tu? Cosa c\'è per cena? 🍲','Ho fame',yay('Cena! Cena! Cena!'),'Già mangiato',sad('Senza di me? Uffa…')),
+    Q('sera','Com\'è andata la giornata?','Bene',yay('Evviva! Me lo sentivo.'),'Faticosa',love('Allora adesso ti meriti coccole. 💕')),
+    Q('sera','Dimmi una cosa bella di oggi!','Ce l\'ho',yay('Tienila stretta stretta!'),'Ci penso',think('Anche questa chiacchierata conta, eh!')),
+    Q('sera','Si scrive ancora un po\'?','Sì',yay('Ok! Io faccio il tifo silenzioso.'),'Basta per oggi',purr('Giusto. Anche le storie dormono.')),
+    Q('sera','Serata di giochi da tavolo? 🎲','Magari!',yay('Io lancio i dadi con la lingua!'),'Non stasera',cur('Allora domani. Me lo segno!')),
+    Q('sera','Hai salvato il lavoro? 💾','Sì',yay('Bravo! Niente panico.'),'Ops, vado',eek('Corri corri corri!')),
+    Q('sera','Copertina e tisana? 🍵','Sì',purr('Che coccola… mrrr.'),'Niente tisana',cur('Allora copertina e basta!')),
+    // notte
+    Q('notte','Ehi… è tardi. Ancora tanto? 🌙','Un pochino',purr('Ok, io resto sveglio. Credo.'),'Fino all\'alba',eek('Ma sei un vampiro?!')),
+    Q('notte','Spuntino di mezzanotte? 🍪','Sì!',yay('Missione segreta: frigo!'),'Meglio di no',think('Saggio. Io però ci penso.')),
+    Q('notte','Le idee migliori arrivano di notte, vero?','Verissimo',yay('Lo dicono anche i gufi!'),'Ho solo sonno',purr('Allora a nanna, dai…')),
+    Q('notte','Mi canti la ninna nanna?','La la la 🎶',love('Mmmh… che bella voce… zzz'),'Fai da solo',sad('Lalalà… stonato da solo.')),
+    Q('notte','Lo sai che anche la luna fa le ore piccole? 🌙','Ciao luna!',yay('La luna ti saluta!'),'Davvero?',cur('Sì! Me l\'ha detto lei.'))
+  ];
+
+  /* ---------- frasette senza domanda ---------- */
+  const S_ = (b,...t)=>t.map(x=>({b,t:x}));
+  const STATEMENTS = [
+    ...S_('any','Blip! 🫧','Sono qui, eh!','Ho visto una mosca. Era enorme. Forse.','Mi annoio un pochino…','Tic tac tic tac… ⌨️',
+      'Io intanto carico le pile ⚡','Che bel rumore fanno i tasti!','Sto contando le lucine. Una.','Psst… sei bravo.',
+      'Mmmh, che profumo di idee!','Prrrrr 🫧','Si sta bene qui al calduccio del caricatore.'),
+    ...S_('mattina','Buongiorno mondo! ☀️','Ho ancora gli occhi cisposi…','Profumo di caffè! O me lo sogno?'),
+    ...S_('pranzo','Brontolio di pancia in corso… 🍝','Sento odore di sugo!','Io mangerei un tortellino. O cento.'),
+    ...S_('pomeriggio','Ho un languorino… 🍪','Il pomeriggio è morbido…','Ho voglia di biscotti. Tanta.'),
+    ...S_('sera','Si sta bene qui la sera ✨','Le lucine della sera mi piacciono.','Pancino vuoto… cena?'),
+    ...S_('notte','È tardi tardi… 🌙','Mmh… ho sonnellino…','Ancora una riga e poi a nanna?','Shhh… il mondo dorme.')
+  ];
+
+  /* ---------- Natale (dal 10 novembre al 7 gennaio, ogni anno) ---------- */
+  const XM = o=>Object.assign(o,{f:'11-10',to:'01-07',x:1});
+  const DAY = (d,o)=>Object.assign(o,{d:[d],x:1});
+  QUESTIONS.push(
+    XM(Q('any','Hai già fatto l\'albero? 🎄','Sì!',yay('Io voglio fare la stellina in cima!'),'Non ancora',cur('Posso fare la pallina? Sono già tondo!'))),
+    XM(Q('any','Panettone o pandoro?','Panettone',yay('Con i canditi? Coraggioso!'),'Pandoro',yay('Zucchero a velo dappertutto! ❄️'))),
+    XM(Q('any','Hai scritto la letterina a Babbo Natale? ✉️','Sì',cur('Io ho chiesto una coperta grande come me.'),'Non ancora',think('Sbrigati! Le renne hanno fretta.'))),
+    XM(Q('any','Che regalo vorresti quest\'anno? 🎁','Una sorpresa',yay('Le sorprese sono le cose migliori!'),'Lo so io',cur('Segretissimo? Non lo dico a nessuno!'))),
+    XM(Q('any','Hai già comprato i regali?','Tutti!',yay('Sei un elfo efficientissimo! 🧝'),'Neanche uno',eek('Corri, che il 24 arriva!'))),
+    XM(Q('any','Mi metti una lucina addosso? ✨','Eccola',love('Brillo! Guarda come brillo! 💕'),'Sei già luminoso',yay('Ooh, che complimento!'))),
+    XM(Q('any','Cantiamo una canzone di Natale? 🎶','Sì!',yay('Din don dan! Io faccio le campanelle!'),'Sono stonato',purr('Anche io! Stonati insieme.'))),
+    XM(Q('any','Presepe o albero?','Presepe',cur('Posso fare la pecorella? Beee!'),'Albero',yay('Lucine lucine lucine!'))),
+    XM(Q('any','Secondo te Babbo Natale porta qualcosa anche a me?','Certo!',love('Evviva! Sono stato bravo… quasi. 💕'),'Sei stato buono?',eek('…quasi sempre!'))),
+    XM(Q('any','Scriviamo una storia di Natale? 📖','Sì!',yay('C\'era una volta un mostriciattolo con la sciarpa…'),'Dopo',cur('Intanto penso al titolo!'))),
+    XM(Q('any','Maglione natalizio brutto: ce l\'hai? 🧶','Bruttissimo',yay('Allora sei pronto per le feste!'),'No',sad('Ne serve uno! Con le renne!'))),
+    XM(Q('any','Neve: la vorresti? ❄️','Tantissima',yay('Pupazzo di neve a forma di Pucchi!'),'Meglio di no',purr('Ok, neve solo sullo schermo.'))),
+    XM(Q('any','Tombola a Natale? 🎲','Sempre!',yay('Ambo! Terno! Pucchi!'),'Meglio un gioco da tavolo',cur('Ottimo! Io tengo i segnalini.'))),
+    XM(Q('any','Hai visto le luci di Natale in giro? ✨','Sì',yay('Sono belle come i miei occhi?'),'Non ancora',cur('Ci andiamo! Io sto nella tasca.'))),
+    XM(Q('pomeriggio','Cioccolata calda? ☕','Con panna!',yay('Baffi di panna per tutti!'),'Senza',cur('Allora io prendo la tua panna!'))),
+    XM(Q('pomeriggio','Facciamo i biscotti di Natale? 🍪','Sì!',yay('Io faccio quelli a forma di stella!'),'Li compro',think('Furbo. Però io li assaggio lo stesso.'))),
+    XM(Q('sera','Film di Natale stasera? 🎬','Sì!',purr('Copertina, divano e lucine… mrrr.'),'Già visti tutti',cur('Allora rivediamo il preferito!'))),
+    XM(Q('notte','Senti? Forse sono le renne sul tetto! 🦌 Le senti?','Sì!',cur('Shhh! Non farti vedere sveglio!'),'È il vento',think('Mmh… vento con i campanellini?'))),
+    Object.assign(Q('mattina','Hai aperto la casella del calendario dell\'Avvento? 🗓️','Sì',yay('Cosa c\'era? Cioccolatino?'),'Me ne sono dimenticato',eek('Corri! Il cioccolatino aspetta!')),{f:'12-01',to:'12-24',x:1}),
+    DAY('12-08',Q('any','Oggi si fa l\'albero! 🎄 Mi fai mettere la stellina?','Sì!',love('Sono il mostro più felice del mondo! 💕'),'Sei troppo piccolo',sad('Allora una pallina piccola piccola…'))),
+    DAY('12-24',Q('any','È la Vigilia! Sei emozionato? 🎁','Tantissimo',yay('Anche io! Non dormirò mai!'),'Un po\' stanco',purr('Stasera relax e cose buone.'))),
+    DAY('12-25',Q('any','Buon Natale!!! 🎄 Hai scartato i regali?','Sì!',yay('Che bello! Racconta racconta!'),'Non ancora',cur('Cosa aspetti?! Scarta scarta!'))),
+    DAY('12-26',Q('any','Santo Stefano: avanzi del pranzo di ieri? 🍲','Montagne',yay('Gnam! Io li finisco volentieri.'),'Finiti',eek('Tutti?! Neanche una lasagna?'))),
+    DAY('12-31',Q('any','Ultimo giorno dell\'anno! Un desiderio per il nuovo? ✨','Ce l\'ho',love('Lo custodisco io. Si avvererà! 💕'),'Ci penso',think('Pensaci bene, che i desideri contano.'))),
+    DAY('01-01',Q('any','Buon anno!! 🎆 Hai fatto tardi?','Tardissimo',purr('Allora oggi si va pianissimo.'),'A nanna presto',yay('Saggio! Anno nuovo, occhi freschi.'))),
+    DAY('01-06',Q('any','È la Befana! Calza piena di dolci o di carbone? 🧦','Dolci!',yay('Lo sapevo che eri buono!'),'Carbone…',eek('Pure io… ma è carbone dolce!')))
+  );
+  const daysToXmas = ()=>{ const n=new Date(), x=new Date(n.getFullYear(),11,25); return Math.ceil((x-n)/86400000); };
+  const XS = (b,...t)=>t.map(x=>XM({b,t:x}));
+  STATEMENTS.push(
+    ...XS('any','Mi sento natalizio dentro! 🎄','Jingle jingle! 🔔','Profumo di mandarini! 🍊','Pucchi elfo, al tuo servizio! 🧝',
+      'Sto facendo l\'elenco dei buoni. Tu ci sei! ✨','Fuori fa freddino, qui si sta al calduccio ❄️','Shhh… sto incartando un regalo. Non guardare!',
+      'Sento le campanelline! 🔔','Ho messo il cappellino. Mi sta bene? 🎅','Io voglio tanta neve. Finta e vera.'),
+    ...XS('mattina','Buongiorno! Oggi sa di Natale ☃️'),
+    ...XS('sera','Le lucine di Natale sono le mie preferite ✨'),
+    ...XS('notte','Babbo Natale lavora di notte, come te 🌙'),
+    Object.assign({b:'any',t:()=>{ const d=daysToXmas(); return d===1 ? 'Domani è Natale!!! 🎄' : 'Mancano '+d+' giorni a Natale! 🎄'; }},{f:'11-10',f2:'12-23',x:1}),
+    ...[['12-24','Stanotte passa Babbo Natale! 🎅'],['12-25','Buon Natale! 🎄💚'],['12-31','Stasera botti! Io mi nascondo sotto la coperta 🎆'],
+        ['01-01','Buon anno nuovo! 🎉'],['01-06','L\'Epifania tutte le feste si porta via… 🧹']].map(([d,t])=>DAY(d,{b:'any',t}))
+  );
+
+  /* ---------- calendario ---------- */
+  const today = ()=>{ const d=new Date(); return String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+  const toN = s=>parseInt(s.replace('-',''),10);
+  function inWin(f,t){ const x=toN(today()), a=toN(f), b=toN(t); return a<=b ? (x>=a&&x<=b) : (x>=a||x<=b); }
+  function active(it){
+    if (it.d) return it.d.includes(today());
+    if (it.f2) return inWin(it.f, it.f2);
+    if (it.f) return inWin(it.f, it.to);
+    return true;
+  }
+  const isXmas = ()=>inWin('11-10','01-07');
+  body.classList.toggle('xmas', isXmas());
+
+  /* ---------- fasce orarie e mazzo senza ripetizioni ---------- */
+  function band(){
+    const d=new Date(), h=d.getHours()+d.getMinutes()/60;
+    if (h>=6 && h<12) return 'mattina';
+    if (h>=12 && h<14.5) return 'pranzo';
+    if (h>=14.5 && h<19) return 'pomeriggio';
+    if (h>=19 && h<23) return 'sera';
+    return 'notte';
+  }
+  let used = {q:[], s:[]}, lastPicked = {q:-1, s:-1};
+  try { Object.assign(used, JSON.parse(localStorage.getItem('pucchiUsed')||'{}')); } catch(e){}
+  function freshPick(list, kind){
+    const b = band();
+    const pool = list.map((x,i)=>i).filter(i=>(list[i].b==='any' || list[i].b===b) && active(list[i]));
+    let fresh = pool.filter(i=>!used[kind].includes(i));
+    if (!fresh.length){ used[kind] = used[kind].filter(i=>!pool.includes(i)); fresh = pool.slice(); }
+    if (fresh.length>1) fresh = fresh.filter(i=>i!==lastPicked[kind]);
+    const ofDay  = fresh.filter(i=>list[i].d);
+    const ofXmas = fresh.filter(i=>list[i].x);
+    const ofBand = fresh.filter(i=>list[i].b===b);
+    let from = fresh;
+    if (ofDay.length && Math.random()<.7) from = ofDay;
+    else if (ofXmas.length && Math.random()<.4) from = ofXmas;
+    else if (ofBand.length && Math.random()<.55) from = ofBand;
+    const i = pick(from);
+    used[kind].push(i); lastPicked[kind]=i;
+    try { localStorage.setItem('pucchiUsed', JSON.stringify(used)); } catch(e){}
+    return list[i];
+  }
+  const isNight = () => { const h=new Date().getHours(); return h>=23 || h<6; };
+
+  const EVENTS = [
+    {w:30, f:()=>{ const D=freshPick(QUESTIONS,'q'); setMood('curious',3000); SFX.ask(); anim('squish'); setTimeout(()=>say(D.q,D.a),400); }},
+    {w:18, f:()=>{ setMood('happy',2500); SFX.chirp(); const T=freshPick(STATEMENTS,'s').t; say(typeof T==='function'?T():T); }},
+    {w:12, f:()=>{ setMood('curious',2800); SFX.ask(); lookAround(); }},
+    {w:10, f:()=>{ setMood('happy',1800); SFX.giggle(); anim('wiggle'); }},
+    {w:7,  f:()=>{ setMood('surprised',600); SFX.sneeze(); setTimeout(()=>{ setMood('ouch',900); anim('squish'); },350);
+                   setTimeout(()=>{ setMood('happy',2000); say('Etciù! Scusa 🤧'); },1300); }},
+    {w:7,  f:()=>{ setMood('yawn',1500); SFX.yawn(); }},
+    {w:6,  f:()=>{ nap(rnd(45,120)*1000); }},
+    {w:5,  f:()=>{ setMood('think',2500); setTimeout(()=>{ setMood('happy',2000); SFX.chirp(); say('Ho avuto un\'idea! …No, l\'ho persa.'); },2200); }}
+  ];
+  function randomEvent(){
+    const list = isNight() ? EVENTS.map(e=>e.f===EVENTS[5].f||e.f===EVENTS[6].f ? {...e,w:e.w*3}:e) : EVENTS;
+    let t = list.reduce((s,e)=>s+e.w,0)*Math.random();
+    for (const e of list){ if((t-=e.w)<=0){ e.f(); return; } }
+  }
+
+  /* ---------- sonno ---------- */
+  let napUntil = 0;
+  function nap(ms){
+    hideBubble(); setMood('sleepy'); look(0,1.5);
+    setTimeout(()=>{ if(mood==='sleepy'){ setMood('sleep'); napUntil=Date.now()+ms; } }, 3500);
+  }
+  function wake(gentle){
+    napUntil=0; setMood('surprised', 700);
+    setTimeout(()=>{ if(gentle){ setMood('happy',2200); SFX.chirp(); say(pick(['Oh! Ero sveglio, eh!','Non stavo dormendo… giuro.','Eccomi! Che mi sono perso?'])); } },650);
+  }
+
+  /* ---------- tempo e frequenza ---------- */
+  const GAP = [[150,300],[60,150],[22,55]]; // secondi tra un evento e l'altro
+  let nextEvent = 0, lastTouch = Date.now(), started=false;
+  const schedule = () => { const g=GAP[S.chat]; nextEvent = Date.now() + rnd(g[0],g[1])*1000*(isNight()?1.6:1); };
+  setInterval(()=>{
+    if(!started) return;
+    body.classList.toggle('night', isNight()); body.classList.toggle('xmas', isXmas());
+    const now=Date.now();
+    if (mood==='sleep'){
+      if (napUntil && now>napUntil && !isNight()) wake(true);
+      else if (napUntil && now>napUntil+600000) wake(true);
+      return;
+    }
+    if (!bubbleOpen && now>nextEvent){ randomEvent(); schedule(); }
+  }, 1000);
+
+  /* ---------- tocchi ---------- */
+  let down=null, moved=0, lastPet=0;
+  function touched(){ lastTouch=Date.now(); }
+  function hitEye(x,y){ return eyesEls.some(e=>{ const r=e.getBoundingClientRect(); return x>r.left&&x<r.right&&y>r.top&&y<r.bottom; }); }
+  function gazeAt(x,y){
+    holdGaze = Date.now()+1500;
+    look(((x/innerWidth)-.5)*13, ((y/innerHeight)-.45)*8);
+  }
+  face.addEventListener('pointerdown', e=>{
+    if(!started) return;
+    initAudio(); touched();
+    down={x:e.clientX,y:e.clientY,t:Date.now()}; moved=0;
+    if (mood==='sleep'){ wake(true); down=null; return; }
+    gazeAt(e.clientX,e.clientY);
+  });
+  face.addEventListener('pointermove', e=>{
+    if(!down) return;
+    moved += Math.hypot(e.movementX||0, e.movementY||0);
+    gazeAt(e.clientX,e.clientY);
+    if (moved>60 && Date.now()-lastPet>350){
+      lastPet=Date.now(); body.classList.add('blush');
+      if (mood!=='purr'){ setMood('purr'); SFX.purr(); }
+      else if (Math.random()<.35) SFX.purr();
+      pop(e.clientX,e.clientY);
+    }
+  });
+  const end = e=>{
+    if(!down) return;
+    const quick = Date.now()-down.t < 400 && moved<25;
+    if (quick){
+      if (hitEye(down.x,down.y)){ setMood('ouch',1400); SFX.ouch(); anim('wiggle'); if(Math.random()<.5) setTimeout(()=>say(pick(['Ahia! L\'occhio!','Ehi! Quello è un occhio!','>_< nooo'])),300); }
+      else { setMood('happy',1600); SFX[pick(['boop','giggle','chirp'])](); anim('squish'); pop(down.x,down.y, pick(['💗','✨','⭐'])); }
+    } else if (moved>=60){
+      setMood('purr',2200); setTimeout(()=>body.classList.remove('blush'), 2200);
+      if (Math.random()<.4) setTimeout(()=>say(pick(['Ancoraaa 🥰','Mrrr che bello…','Sei il mio umano preferito!'])),500);
+    }
+    down=null;
+  };
+  face.addEventListener('pointerup', end); face.addEventListener('pointercancel', end);
+
+  /* ---------- orologio ---------- */
+  function tickClock(){ const d=new Date(); $('#hh').textContent=String(d.getHours()).padStart(2,'0'); $('#mm').textContent=String(d.getMinutes()).padStart(2,'0'); }
+  tickClock(); setInterval(tickClock, 5000);
+
+  /* ---------- schermo sempre acceso ---------- */
+  let wl=null;
+  async function keepAwake(){
+    try{ if('wakeLock' in navigator){ wl = await navigator.wakeLock.request('screen'); $('#wlState').textContent='✓';
+         wl.addEventListener('release',()=>{ $('#wlState').textContent='✗'; }); }
+         else $('#wlState').textContent='✗'; }
+    catch(e){ $('#wlState').textContent='✗'; }
+  }
+  document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='visible' && started) keepAwake(); });
+
+  /* ---------- avvio ---------- */
+  setMood('sleep');
+  $('#start').addEventListener('pointerdown', e=>{
+    e.stopPropagation(); initAudio(); keepAwake(); started=true; $('#start').remove();
+    setMood('surprised',700);
+    setTimeout(()=>{
+      const h=new Date().getHours();
+      const hi = h<6 ? 'Uh? È notte fonda! 🌙' : h<12 ? 'Buongiorno! ☀️ Si scrive?' : h<18 ? 'Ciao! Ti faccio compagnia 💚' : h<23 ? 'Buonasera! Io sono pronto ✨' : 'È tardi… ma resto sveglio per te 🌙';
+      setMood('happy',2400); SFX.giggle(); anim('squish'); say(hi);
+    },700);
+    schedule(); nextEvent = Date.now()+rnd(25,45)*1000;
+  });
+
+  /* ---------- pannello ---------- */
+  const panel=$('#panel');
+  $('#gear').addEventListener('pointerdown', e=>e.stopPropagation());
+  $('#gear').addEventListener('click', ()=>{ panel.classList.add('open'); paint(); });
+  $('#closeP').addEventListener('click', ()=>panel.classList.remove('open'));
+  panel.addEventListener('pointerdown', e=>{ e.stopPropagation(); if(e.target===panel) panel.classList.remove('open'); });
+  function paint(){
+    [['#sSound','sound'],['#sChat','chat'],['#sTheme','theme'],['#sClock','clock']].forEach(([id,k])=>{
+      document.querySelectorAll(id+' button').forEach(b=>b.classList.toggle('on', String(S[k])===b.dataset.v));
+    });
+  }
+  [['#sSound','sound',Number],['#sChat','chat',Number],['#sTheme','theme',String],['#sClock','clock',Number]].forEach(([id,k,cast])=>{
+    document.querySelectorAll(id+' button').forEach(b=>b.addEventListener('click',()=>{
+      S[k]=cast(b.dataset.v); save(); paint(); applyTheme();
+      if(k==='chat') schedule();
+      if(k==='sound' && S.sound){ initAudio(); SFX.chirp(); }
+    }));
+  });
+})();
+</script>
+</body>
+</html>
